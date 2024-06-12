@@ -1,17 +1,44 @@
-@allowed([
-  'eastus'
-  'westus'
-])
-param location string = 'eastus'
-@minLength(4)
-@maxLength(7)
-param part string
-var name = '${part}res'
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: 'st889${name}'
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-}
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "allowedValues": [
+                "eastus",
+                "westus"
+            ],
+            "defaultValue": "eastus",
+            "metadata": {
+                "description": "description"
+            }
+        }
+        "part": {
+            "type": "string",
+            "minLength":4,
+            "maxLength":7
+            "metadata": {
+                "description": "description"
+            }
+        }
+    },
+    "variables": {
+        "name": "[concat(parameters('part'),'res')]"
+    },
+    "resources": [
+        {
+            "name": "[concat('st1990',variables('name'))]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-01-01",
+            "tags": {
+                "displayName": "storageaccount1"
+            },
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            }
+        }
+    ],
+    "outputs": {}
